@@ -1,0 +1,145 @@
+<div class="h-screen w-[90%] max-h-screen m-auto">
+    <div class="min-h-[15vh] flex w-full">
+        <h1 class="text-5xl text-center m-auto">Space X Mission Lauch List</h1>
+    </div>
+    @if (data.length === 0) {
+    <div class="w-full flex py-20">
+        <span class="loading loading-spinner w-1/2 m-auto"></span>
+    </div>
+    }
+    <div class="flex gap-6">
+        <div class="h-full w-[15%] max-w-[15%] min-w-[15%] flex flex-col gap-9">
+            <div class="flex flex-col gap-3">
+                <h3 class="w-full text-center font-semibold text-2xl">
+                    Launch Year
+                </h3>
+                <div
+                    class="flex flex-wrap justify-center align-middle items-center gap-2"
+                >
+                    @for (item of years; track $index) {
+                    <button
+                        class="btn"
+                        (click)="filterYear(item)"
+                        [class.btn-secondary]="selectedYear === item"
+                        [class.btn-primary]="selectedYear !== item"
+                    >
+                        {{ item }}
+                    </button>
+                    }
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <h3 class="w-full text-center font-semibold text-2xl">
+                    Success Launch
+                </h3>
+                <div class="join flex justify-center">
+                    <button
+                        class="btn join-item"
+                        (click)="filterLaunchSuccess(true)"
+                        [class.btn-secondary]="selectedLaunchSuccess === true"
+                        [class.btn-primary]="selectedLaunchSuccess !== true"
+                    >
+                        Yes
+                    </button>
+
+                    <button
+                        class="btn join-item"
+                        (click)="filterLaunchSuccess(false)"
+                        [class.btn-secondary]="selectedLaunchSuccess === false"
+                        [class.btn-primary]="selectedLaunchSuccess !== false"
+                    >
+                        No
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <h3 class="w-full text-center font-semibold text-2xl">
+                    Success Land
+                </h3>
+                <div class="join flex justify-center">
+                    <button
+                        class="btn join-item"
+                        (click)="filterLandingSuccess(true)"
+                        [class.btn-secondary]="selectedLandingSuccess === true"
+                        [class.btn-primary]="selectedLandingSuccess !== true"
+                    >
+                        Yes
+                    </button>
+
+                    <button
+                        class="btn join-item"
+                        (click)="filterLandingSuccess(false)"
+                        [class.btn-secondary]="selectedLandingSuccess === false"
+                        [class.btn-primary]="selectedLandingSuccess !== false"
+                    >
+                        No
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div
+            class="flex flex-wrap w-[85%] max-w-[85%] min-w-[85%] gap-5 max-h-[85vh] relative flex-grow overflow-y-scroll"
+        >
+            @for (item of filteredData; track $index) {
+            <div class="card w-72 bg-base-300 shadow-2xl">
+                <figure>
+                    <img
+                        class="aspect-square w-full p-5"
+                        src="{{ item.links.mission_patch_small }}"
+                        alt="Shoes"
+                    />
+                </figure>
+                <div class="card-body gap-5">
+                    <h2 class="card-title">{{ item.mission_name }}</h2>
+                    <div class="w-full">
+                        <ul class="w-full">
+                            <li class="flex justify-between w-full">
+                                <p>Mission Ids:</p>
+                                <p class="w-fit text-right">
+                                    {{ item.mission_id.join(", ") }}
+                                </p>
+                            </li>
+                            <li class="flex justify-between w-full">
+                                <p>Launch Year:</p>
+                                <p class="w-fit text-right">
+                                    {{ item.launch_year }}
+                                </p>
+                            </li>
+                            <li class="flex justify-between w-full">
+                                <p>Launch Success:</p>
+                                <p class="w-fit text-right">
+                                    {{ item.launch_success ? "Yes" : "No" }}
+                                </p>
+                            </li>
+                            <li class="flex justify-between w-full">
+                                <p>Land Success:</p>
+                                <p class="w-fit text-right">
+                                    {{
+                                        item.rocket.first_stage.cores[0]
+                                            .land_success === null
+                                            ? "N/A"
+                                            : item.rocket.first_stage.cores[0]
+                                                  .land_success === true
+                                            ? "Yes"
+                                            : "No"
+                                    }}
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-actions justify-end">
+                        <button
+                            class="btn btn-primary btn-block text-lg"
+                            (click)="onSeeMoreClick(item)"
+                        >
+                            See More
+                        </button>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
